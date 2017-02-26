@@ -68,7 +68,7 @@ def parseCommand(phrase):
 	phrase = phrase.lower()
 	if(phrase == "play"):
 		cmd.append((1,"play"))
-	elif(phrase == "pause"):
+	elif("pause" in phrase or "does" in phrase):
 		cmd.append((1,"pause"))
 	elif("skip" in phrase):
 		cmd.append((1,"skip"))
@@ -100,14 +100,15 @@ def sendRequest(command):
 		if(cmd == "play"):
 			sp_client.unpause(_OAUTH_TOKEN, _CSRF_TOKEN)
 			asay(">> Play")
-		elif(cmd == "pause"):
+		elif("pause" in cmd or "does" in cmd):
 			sp_client.pause(_OAUTH_TOKEN, _CSRF_TOKEN)
 			asay("|| Paused")
 		elif("skip" in cmd or "next" in cmd):
 			if(len(_CURR_TRACK_LIST) == 0):
 				asay("Empty track list! Play a song to populate tracklist")
 				return 
-			track_number = random.randint(0, len(_CURR_TRACK_LIST))
+			track_number = random.randint(0, len(_CURR_TRACK_LIST)-1)
+			asay("Playing track number " + str(track_number))
 			sp_client.play(_OAUTH_TOKEN, _CSRF_TOKEN, _CURR_TRACK_LIST[track_number])
 
 	elif(key == 2):
@@ -133,11 +134,13 @@ def sendRequest(command):
 				asay("Playing " + str(result['artists']['items'][0]['name']))
 				artist_uri = result['artists']['items'][0]['uri']
 				sp_client.play(_OAUTH_TOKEN, _CSRF_TOKEN, artist_uri)
+				# Get remaining tracks in album to enable skipping
+
 				return
 			# Track + Artist name provided
 			elif("by" in cmd):
-				track = cmd[0]
-				artist = cmd[-1]
+				cmd = cmd.replace("play ","")
+				track, artist = cmd.split("by")
 				asay("Looking for " + str(artist) + ":" + str(track))
 				result = _SP.search(q=track+" "+artist, type='track', limit=_TLIMIT)
 			# Track name only
@@ -151,6 +154,13 @@ def sendRequest(command):
 				album_uri = result['tracks']['items'][0]['album']['uri']
 				album_tracks = _SP.album_tracks(album_id=album_uri)
 				_CURR_TRACK_LIST = [item['uri'] for item in album_tracks['items']]
+				# Single record? (one song in the album): search the artist playlist
+				if(len(_CURR_TRACK_LIST) <= 1):
+					artist = result['tracks']['items'][0]['artists'][0]
+					singles = _SP.artist_albums(artist['id'])
+					_CURR_TRACK_LIST = []
+					_CURR_TRACK_LIST = [item['uri'] for item in singles['items']]
+
 			except KeyError or IndexError:
 				asay("Couldn't find URI")
 				return
@@ -160,14 +170,10 @@ def capture():
 	r = sr.Recognizer()
 	m = sr.Microphone()
 
-	# Adjusting to ambient noise level
-	asay("Hi! I'm Apollo!")
 	with m as source:
-		asay("Let me adjust the mic really quick")
-		#r.adjust_for_ambient_noise(source)
-		r.energy_threshold = 4000
-		asay("Say 'hello' to adjust mic level")
+		r.adjust_for_ambient_noise(source)
 		audio = r.listen(source)
+	print(type(audio))
 	return callback(r, audio)
 
 def callback(recog, audio):
@@ -189,24 +195,6 @@ def callback(recog, audio):
 
 
 def main():
-	'''
-		Main listening loop (runs until explicitly killed)
-	
-	r = sr.Recognizer()
-	m = sr.Microphone()
-
-	# Adjusting to ambient noise level
-	asay("Hi! I'm Apollo!")
-	with m as source:
-		asay("Let me adjust the mic really quick")
-		r.adjust_for_ambient_noise(source)
-		asay("Say 'hello' to adjust mic level")
-		audio = r.listen(source)
-
-	r.energy_threshold = 4000
- 	stop_listening = r.listen_in_background(m, callback)
- 	'''
- 	# Busy loop while background thread listens
  	time.sleep(2)
  	asay("... waiting for command ...")
 	while True:
