@@ -65,6 +65,9 @@ def parseCommand(phrase):
 			captured_audio instance
 	'''
 	cmd  = []
+	if(phrase == None):
+		asay("No command received")
+		return
 	phrase = phrase.lower()
 	if(phrase == "play"):
 		cmd.append((1,"play"))
