@@ -30,6 +30,10 @@ being missed between streams. For learning purposes (and robustness), the more
 complex implementation is shown here.
 """
 
+# NOTE: This script has been slightly modified to be used as the speech
+# recognition interface for the Spotify voice controller called Apollo
+
+
 from __future__ import division
 
 import argparse
