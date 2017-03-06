@@ -188,7 +188,8 @@ def callback(recog, audio):
 	'''
 	asay("I heard something!")
 	try:
-		phrase = recog.recognize_wit(audio, key=_WIT_AI_KEY)
+		#phrase = recog.recognize_wit(audio, key=_WIT_AI_KEY)
+		phrase = recog.recognize_google(audio)# key="AIzaSyBsnVr8D3qCywKHlEQm29Z_KtrUyfVBUaM")
 		usay(phrase)
 		return phrase
 	except sr.UnknownValueError:
