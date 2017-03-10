@@ -79,7 +79,7 @@ class Apollo(object):
 		if(not len(phrase)):
 			asay("No command received")
 			return None
-		phrase = phrase.lower().strip(re.search(r'\b(spotify)\b', phrase)
+		phrase = phrase.lower().strip(re.search(r'\b(spotify)\b', phrase))
 		if("play" in phrase and len(phrase) <= 2):
 			cmd['A'] = "play"
 		elif("pause" in phrase or "does" in phrase):
@@ -96,7 +96,7 @@ class Apollo(object):
 		elif("play" in phrase and "playlist" in phrase):
 			keywords = phrase.split("play ")[-1]
 			cmd['B'] = keywords
-		else
+		else:
 			asay("No command received")
 			return None
 		if(len(cmd) >= 1):
