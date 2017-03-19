@@ -7,7 +7,7 @@ by audio player control commands such as the following:
 - "Pause"
 - "Skip this one"
 - "Previous song"
-- "Add this one to playlist <playlist_name>"
+- "Add this one to playlist /<playlist_name/>"
 
 This project it in its infancy and will be improved with time. 
 
