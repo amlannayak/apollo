@@ -58,7 +58,7 @@ import grpc
 import pyaudio, wave
 from six.moves import queue
 
-import apollo
+import spvClient
 
 # Seconds you have to wrap up your utterance
 WRAP_IT_UP_SECS = 15
@@ -215,8 +215,8 @@ def listen_print_loop(
     time_to_switch = time.time() + max_recog_secs - wrap_it_up_secs
     graceful_exit = False
     num_chars_printed = 0
-    # Create Apollo object to interact with Spotify
-    apl = apollo.Apollo()
+    # Create spvClient object to interact with Spotify
+    apl = spvClient.spvClient()
     # TODO: Create PyAudio object to play UI sound
     #ui_audio = pyaudio.PyAudio()
     #wav_file = wave.open(os.getenv('AP_UI_SOUND'), "rb")
