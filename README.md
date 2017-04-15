@@ -1,18 +1,22 @@
-## Apollo
+## Spotify Voice Controller
 
-Apollo is a simple voice-enabled Spotify controller. It can be invoked with the command "Hey, Apollo!" followed 
-by audio player control commands such as the following:
+An extremely basic voice controller for the Spotify Desktop application using [Google Speech API] for command transcription. 
+
+### Instructions 
+**NOTE:** _This has only been tested on macOS_
+Install [Spotify](https://www.spotify.com/us/) and start the application. A few environment variables need to be set in order to run the controller:
+* The spotipy client ID and client Secret (you can obtain a pair for yourself)
+* Google Speech Application credentials
+
+The client class is defined in spvClient.py. An instance of this class is used as the interface between the Google Speech API and Spotify. It parses the text returned by Speech API and sends the corresponding commands to the Spotify application. Supported commands include:
 
 - "Play 'Your Hand in Mine' by Explosions in the Sky"
+- "Play artist "
 - "Pause"
 - "Skip this one"
-- "Previous song"
-- "Add this one to playlist /<playlist_name/>"
 
-This project it in its infancy and will be improved with time. 
+More commands may/may not be added in the future
 
 ## Dependencies
-speech_recognition
-pyaudio
-wit.ai
+Google Speech API
 spotipy 
