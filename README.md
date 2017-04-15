@@ -1,6 +1,6 @@
 ## Spotify Voice Controller
 
-An extremely basic voice controller for the Spotify Desktop application using [Google Speech API] for command transcription. 
+An extremely basic voice controller for the Spotify Desktop application using [Google Speech API](https://cloud.google.com/speech/) for command transcription. 
 
 ### Instructions 
 **NOTE:** _This has only been tested on macOS_
